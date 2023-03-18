@@ -4,14 +4,22 @@ import {
   useNetwork,
   useStarkName,
 } from "@starknet-react/core";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 function WalletConnected() {
   const { address } = useAccount();
   const { disconnect } = useConnectors();
-  // const { data, isLoading, isError } = useStarkName({ address: address || "" });
-  const { chain } = useNetwork();
-  // console.log(chain);
+  const [starknetID, setStarknetID] = useState("");
+  const {
+    data: id,
+    isLoading,
+    isError,
+  } = useStarkName({ address: address || "" });
+  useEffect(() => {
+    if (id) {
+      setStarknetID(id);
+    }
+  }, [id]);
 
   const shortenedAddress = useMemo(() => {
     if (!address) return "";
@@ -21,7 +29,7 @@ function WalletConnected() {
   return (
     <div className="md:ml-4">
       <span className="text-xl px-3 pr-6 py-1 text-xl font-bold">
-        {shortenedAddress}
+        {starknetID ? starknetID : shortenedAddress}
       </span>
       <button
         className="rounded-full bg-blue-600 bg-opacity-100 text-white font-bold px-3 py-1 text-xl"
