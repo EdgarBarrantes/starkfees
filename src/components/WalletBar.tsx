@@ -1,10 +1,13 @@
 import { useAccount, useConnectors, useStarkName } from "@starknet-react/core";
 import { useEffect, useMemo, useState } from "react";
+import { isMobile } from "react-device-detect";
+import Modal from "react-modal";
 
 function WalletConnected() {
   const { address } = useAccount();
   const { disconnect } = useConnectors();
   const [starknetID, setStarknetID] = useState("");
+
   const {
     data: id,
     isLoading,
@@ -42,6 +45,16 @@ function WalletConnected() {
 
 function ConnectWallet() {
   const { connectors, connect } = useConnectors();
+  const [shouldOpenModal, setShouldOpenModal] = useState(false);
+  const openModal = () => {
+    if (isMobile) {
+      setShouldOpenModal(true);
+    }
+  };
+
+  function closeModal() {
+    setShouldOpenModal(false);
+  }
 
   return (
     <div className="md:ml-4">
@@ -53,12 +66,22 @@ function ConnectWallet() {
           <button
             key={connector.id()}
             className="rounded-full bg-blue-600 bg-opacity-100 text-white font-bold px-3 py-1 text-xl mr-1"
-            onClick={() => connect(connector)}
+            onClick={() => {
+              openModal();
+              connect(connector);
+            }}
           >
             {connector.id()}
           </button>
         );
       })}
+      <Modal
+        isOpen={shouldOpenModal}
+        onRequestClose={closeModal}
+        contentLabel="Mobile?"
+      >
+        Support for mobile (Braavos)? Coming soon in your nearest laptop!
+      </Modal>
     </div>
   );
 }
