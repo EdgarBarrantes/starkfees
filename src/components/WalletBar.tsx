@@ -5,7 +5,7 @@ import {
   useStarkName,
   useStarknet,
 } from "@starknet-react/core";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import Modal from "react-modal";
 import Link from "next/link";
@@ -103,6 +103,22 @@ function ConnectWallet() {
     }
   };
 
+  const videoId = "xm3YgoEiEDc";
+  const ytAppUrl = `vnd.youtube:${videoId}`;
+  const ytWebUrl = `https://www.youtube.com/watch?v=${videoId}`;
+
+  const handleVideoClick = useCallback(
+    (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+      event.preventDefault();
+      window.location.href = ytAppUrl;
+
+      setTimeout(() => {
+        window.location.href = ytWebUrl;
+      }, 2000);
+    },
+    [ytAppUrl, ytWebUrl]
+  );
+
   return (
     <div className="md:ml-4 z-50">
       <span className="text-xl px-3 pr-1 py-1 text-xl font-bold">
@@ -133,13 +149,15 @@ function ConnectWallet() {
         <br />
         <p className="text-center">
           In the meantime: <br />
-          <a
-            href="https://www.youtube.com/watch?v=xm3YgoEiEDc&t=10s"
+          <Link
+            href={ytWebUrl}
+            onClick={handleVideoClick}
             target="_blank"
+            rel="noopener noreferrer"
             className="text-white font-semibold mt-2 block p-3 bg-orange-700 rounded-md text-center animate-pulse"
           >
             Check this out!
-          </a>
+          </Link>
         </p>
       </Modal>
       <Modal
