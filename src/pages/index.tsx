@@ -3,8 +3,10 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import React, { useEffect, useState } from "react";
-import { useAccount, useStarkName } from "@starknet-react/core";
+import { useAccount } from "@starknet-react/core";
 import WalletBar from "@/components/WalletBar";
+import { FaGithub } from "react-icons/fa";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,12 +26,7 @@ export default function Home() {
     price: 0,
   });
 
-  const { account, address: unformattedAddress, status } = useAccount();
-  // const {
-  //   data: id,
-  //   isLoading,
-  //   isError,
-  // } = useStarkName({ address: address || "" });
+  const { account, address: unformattedAddress } = useAccount();
 
   useEffect(() => {
     if (unformattedAddress) {
@@ -67,7 +64,7 @@ export default function Home() {
       <main className={`${styles.main} gradient`}>
         <div className={`${styles.description}`}>
           <p className="text-lg ">
-            Ah, how many fees have ye spent in Starknet, eh?
+            How much in fees have ye spent in Starknet, eh?
           </p>
           <div>
             <WalletBar />
@@ -132,7 +129,11 @@ export default function Home() {
           </div>
         </div>
 
-        <div className={styles.grid}>{/* Placeholder for links */}</div>
+        <div className="flex w-full justify-end">
+          <Link href="https://github.com/EdgarBarrantes/starkfees">
+            <FaGithub />
+          </Link>
+        </div>
       </main>
     </>
   );

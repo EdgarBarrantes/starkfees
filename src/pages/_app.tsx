@@ -8,7 +8,7 @@ export default function App({ Component, pageProps }: AppProps) {
     new InjectedConnector({ options: { id: "argentX" } }),
   ];
   return (
-    <StarknetConfig connectors={connectors}>
+    <StarknetConfig connectors={connectors} autoConnect>
       <Component {...pageProps} />
     </StarknetConfig>
   );

@@ -1,9 +1,4 @@
-import {
-  useAccount,
-  useConnectors,
-  useNetwork,
-  useStarkName,
-} from "@starknet-react/core";
+import { useAccount, useConnectors, useStarkName } from "@starknet-react/core";
 import { useEffect, useMemo, useState } from "react";
 
 function WalletConnected() {
@@ -14,7 +9,11 @@ function WalletConnected() {
     data: id,
     isLoading,
     isError,
-  } = useStarkName({ address: address || "" });
+  } = useStarkName({
+    address: address || "",
+    contract:
+      "0x6ac597f8116f886fa1c97a23fa4e08299975ecaf6b598873ca6792b9bbfb678",
+  });
   useEffect(() => {
     if (id) {
       setStarknetID(id);
