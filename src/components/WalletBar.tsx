@@ -3,6 +3,7 @@ import {
   useAccount,
   useConnectors,
   useStarkName,
+  useStarknet,
 } from "@starknet-react/core";
 import { useEffect, useMemo, useState } from "react";
 import { useMediaQuery } from "react-responsive";
@@ -51,17 +52,21 @@ function WalletConnected() {
 
 function ConnectWallet() {
   const { connectors, connect, available } = useConnectors();
+  const { error } = useStarknet();
   const [shouldOpenMobileModal, setShouldOpenMobileModal] = useState(false);
   const [shouldOpenModal, setShouldOpenModal] = useState(false);
   const isMobile = useMediaQuery({ query: "(max-width: 1024px)" });
 
-  console.log(available);
+  useEffect(() => {
+    if (error) {
+      openModal();
+    }
+  }, [error]);
 
   const openModal = () => {
-    console.log("isMobile", isMobile);
     if (isMobile) {
       setShouldOpenMobileModal(true);
-    } else if (available.length === 0) {
+    } else if (error) {
       setShouldOpenModal(true);
     }
   };
@@ -76,6 +81,10 @@ function ConnectWallet() {
 
   const customStyles = {
     content: {
+      backgroundColor: "rgba(255, 255, 255, 0.7)",
+      borderRadius: "10px",
+      padding: "3rem",
+      color: "black",
       top: "50%",
       left: "50%",
       right: "auto",
@@ -95,7 +104,7 @@ function ConnectWallet() {
   };
 
   return (
-    <div className="md:ml-4">
+    <div className="md:ml-4 z-50">
       <span className="text-xl px-3 pr-1 py-1 text-xl font-bold">
         Choose a wallet:
       </span>
@@ -104,9 +113,9 @@ function ConnectWallet() {
           <button
             key={connector.id()}
             className="rounded-full bg-blue-600 bg-opacity-100 text-white font-bold px-3 py-1 text-xl mr-1"
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", pointerEvents: "auto" }}
             onClick={onConnectClick(connector)}
-            onPointerEnter={onConnectClick(connector)}
+            onTouchEnd={onConnectClick(connector)}
           >
             {connector.id()}
           </button>
@@ -118,7 +127,20 @@ function ConnectWallet() {
         contentLabel="Mobile?"
         style={customStyles}
       >
-        Support for mobile (Braavos)? Coming soon in your nearest laptop!
+        <p className="text-lg">
+          Support for mobile (Braavos)? Coming soon in your nearest laptop!
+        </p>
+        <br />
+        <p className="text-center">
+          In the meantime: <br />
+          <a
+            href="https://www.youtube.com/watch?v=xm3YgoEiEDc&t=10s"
+            target="_blank"
+            className="text-white font-semibold mt-2 block p-3 bg-orange-700 rounded-md text-center animate-pulse"
+          >
+            Check this out!
+          </a>
+        </p>
       </Modal>
       <Modal
         isOpen={shouldOpenModal}
