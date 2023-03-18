@@ -8,6 +8,11 @@ import WalletBar from "@/components/WalletBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
+// Format number to 8 decimals
+const formatNumber = (num: number, dec: number) => {
+  return num.toFixed(dec);
+};
+
 export default function Home() {
   const [address, setAddress] = useState("");
   const [isLoadingFees, setIsLoadingFees] = useState(false);
@@ -28,7 +33,6 @@ export default function Home() {
 
   useEffect(() => {
     if (unformattedAddress) {
-      console.log("unformattedAddress", unformattedAddress);
       const tempAddress =
         unformattedAddress.slice(0, 2) + "00" + unformattedAddress.slice(2);
       setAddress(tempAddress);
@@ -43,14 +47,13 @@ export default function Home() {
     setIsLoadingFees(true);
     const res = await fetch(`/api/gas-by-account?address=${address}`);
     const data = await res.json();
-    console.log("Fees", data.fees);
     setFeesData({
       fees: data.fees,
       averageFee: data.average,
       txs: data.txs,
       price: data.price,
     });
-    setIsLoadingFees(true);
+    setIsLoadingFees(false);
   };
 
   return (
@@ -61,42 +64,68 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.description}>
-          <p>Are you sure you want to find out how much gas have you spent?</p>
+      <main className={`${styles.main} gradient`}>
+        <div className={`${styles.description}`}>
+          <p className="text-lg ">
+            Ah, how many fees have ye spent in Starknet, eh?
+          </p>
           <div>
-            {/* Placeholder for logo */}
             <WalletBar />
-            {/* <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{" "}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a> */}
           </div>
         </div>
 
-        <div className={styles.center}>
-          <div>
-            <br></br>
-            {feesData && (
+        <div className="flex flex-col">
+          <Image
+            src="/mcduck.png"
+            alt="An AI generated image of Scrooge McDuck"
+            width={182}
+            height={224}
+            className={`basis-full self-center ${
+              isLoadingFees ? "animate-spin" : ""
+            }`}
+          />
+          <div className="flex flex-nowrap flex-grow-1 flex-col md:flex-row text-3xl text-center leading-normal">
+            {feesData.fees && (
               <>
-                <div>
-                  <p>Total gas used:</p>
-                  <p>{Number(feesData) / 10 ** 18}</p>
+                <div className="bg-blend-normal shadow-lg p-6 m-2 bg-slate-400 bg-opacity-40 rounded-lg md:basis-1/3">
+                  <p>
+                    Let ol&#39; Scrooge McDuck tell ye. Ye have spent{" "}
+                    <span className="py-1 px-3 rounded-lg bg-slate-400 bg-opacity-40 shadow-sm">
+                      {(Number(feesData.fees) / 10 ** 18).toFixed(6)}Ξ
+                    </span>
+                  </p>
                 </div>
-                <div>
-                  <p>Which now would be...</p>
-                  <p>${(Number(feesData) / 10 ** 18) * 1800}</p>
+                <div className="bg-blend-normal shadow-lg p-4 m-2 bg-slate-400 bg-opacity-40 rounded-lg md:basis-1/3">
+                  <p>
+                    Today that would be...{" "}
+                    <span className="p-1 rounded-lg bg-slate-400 bg-opacity-40 shadow-sm">
+                      $
+                      {(
+                        (Number(feesData.fees) / 10 ** 18) *
+                        (feesData.price ? feesData.price : 1800)
+                      ).toFixed(2)}
+                    </span>{" "}
+                    but alas, tis no more!
+                  </p>
+                </div>
+                <div className="bg-blend-normal shadow-lg p-4 m-2 bg-slate-400 bg-opacity-40 rounded-lg md:basis-1/3">
+                  <p>
+                    And on average, ye have used up{" "}
+                    <span className="p-1 rounded-lg bg-slate-400 bg-opacity-40 shadow-sm">
+                      {(Number(feesData.averageFee) / 10 ** 18).toFixed(6)}Ξ
+                    </span>{" "}
+                    or{" "}
+                    <span>
+                      <span className="p-1 rounded-lg bg-slate-400 bg-opacity-40 shadow-sm">
+                        $
+                        {(
+                          (Number(feesData.averageFee) / 10 ** 18) *
+                          (feesData.price ? feesData.price : 1800)
+                        ).toFixed(2)}{" "}
+                      </span>
+                    </span>
+                    per tx in <span>{feesData.txs}</span> transactions
+                  </p>
                 </div>
               </>
             )}

@@ -91,16 +91,12 @@ export default async function handler(
   }> // Define the response type
 ) {
   try {
-    // Get the Ethereum address from the query parameters
     let { address } = req.query;
     if (!address) {
       res.status(400).json({ message: "Address is required" });
       return;
     }
-    // // Fetch the data from the Voyager.online API
-    // const response = await axios.get<ApiResponse>(url);
 
-    // Change to variable p to fetch all txs
     let config = getConfigTxs(address as string, 1);
     const response = await axios<ApiResponse>(config);
 
@@ -119,17 +115,14 @@ export default async function handler(
     pagePromises.push(priceResponse);
 
     const responses = await Promise.all(pagePromises);
-    console.log(responses);
     const price = responses.pop()?.data.USD;
-    console.log(price);
+    // const price = 1800;
 
     // Combine all data from all responses into one array
     const items = responses.reduce(
       (allItems, response) => [...allItems, ...response.data.items],
       response.data.items
     );
-
-    console.log(items.length);
 
     const fees = items.reduce((acc: number, item: Item) => {
       return Number(item.actual_fee) + acc;
