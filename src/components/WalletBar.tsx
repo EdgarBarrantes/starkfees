@@ -1,7 +1,13 @@
-import { useAccount, useConnectors, useStarkName } from "@starknet-react/core";
+import {
+  Connector,
+  useAccount,
+  useConnectors,
+  useStarkName,
+} from "@starknet-react/core";
 import { useEffect, useMemo, useState } from "react";
-import { isMobile } from "react-device-detect";
+import { useMediaQuery } from "react-responsive";
 import Modal from "react-modal";
+import Link from "next/link";
 
 function WalletConnected() {
   const { address } = useAccount();
@@ -44,17 +50,49 @@ function WalletConnected() {
 }
 
 function ConnectWallet() {
-  const { connectors, connect } = useConnectors();
+  const { connectors, connect, available } = useConnectors();
+  const [shouldOpenMobileModal, setShouldOpenMobileModal] = useState(false);
   const [shouldOpenModal, setShouldOpenModal] = useState(false);
+  const isMobile = useMediaQuery({ query: "(max-width: 1024px)" });
+
+  console.log(available);
+
   const openModal = () => {
+    console.log("isMobile", isMobile);
     if (isMobile) {
+      setShouldOpenMobileModal(true);
+    } else if (available.length === 0) {
       setShouldOpenModal(true);
     }
   };
 
+  function closeMobileModal() {
+    setShouldOpenMobileModal(false);
+  }
+
   function closeModal() {
     setShouldOpenModal(false);
   }
+
+  const customStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+    },
+  };
+
+  const onConnectClick = (connector: Connector<any>) => () => {
+    try {
+      connect(connector);
+      openModal();
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <div className="md:ml-4">
@@ -66,21 +104,47 @@ function ConnectWallet() {
           <button
             key={connector.id()}
             className="rounded-full bg-blue-600 bg-opacity-100 text-white font-bold px-3 py-1 text-xl mr-1"
-            onClick={() => {
-              openModal();
-              connect(connector);
-            }}
+            style={{ cursor: "pointer" }}
+            onClick={onConnectClick(connector)}
+            onPointerEnter={onConnectClick(connector)}
           >
             {connector.id()}
           </button>
         );
       })}
       <Modal
-        isOpen={shouldOpenModal}
-        onRequestClose={closeModal}
+        isOpen={shouldOpenMobileModal}
+        onRequestClose={closeMobileModal}
         contentLabel="Mobile?"
+        style={customStyles}
       >
         Support for mobile (Braavos)? Coming soon in your nearest laptop!
+      </Modal>
+      <Modal
+        isOpen={shouldOpenModal}
+        onRequestClose={closeModal}
+        contentLabel="Do you have a wallet?"
+        style={customStyles}
+      >
+        <span className="text-slate-900">
+          Are you using a wallet? Check out{" "}
+          <a
+            className="underline text-teal-900"
+            target="_blank"
+            href="https://www.argent.xyz/argent-x/"
+          >
+            ArgentX
+          </a>{" "}
+          or{" "}
+          <a
+            className="underline text-teal-900"
+            target="_blank"
+            href="https://braavos.app/"
+          >
+            Braavos
+          </a>
+          .
+        </span>
       </Modal>
     </div>
   );
