@@ -9,28 +9,29 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@starknet-react/core": "^0.16.0",
+    "@argent/starknet-react-webwallet-connector": "^6.5.0",
+    "@starknet-react/core": "^1.0.4",
     "@types/node": "18.15.3",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
-    "axios": "^1.3.4",
+    "axios": "^1.5.0",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
     "next": "13.2.4",
     "react": "18.2.0",
     "react-device-detect": "^2.2.3",
     "react-dom": "18.2.0",
-    "react-icons": "^4.8.0",
+    "react-icons": "^4.11.0",
     "react-modal": "^3.16.1",
-    "reactjs-popup": "^2.0.5",
-    "starknet": "next",
+    "reactjs-popup": "^2.0.6",
+    "starknet": "^5.19.6",
     "typescript": "5.0.2"
   },
   "devDependencies": {
-    "@types/react-modal": "^3.13.1",
-    "autoprefixer": "^10.4.14",
-    "postcss": "^8.4.21",
+    "@types/react-modal": "^3.16.0",
+    "autoprefixer": "^10.4.15",
+    "postcss": "^8.4.29",
     "react-responsive": "^9.0.2",
-    "tailwindcss": "^3.2.7"
+    "tailwindcss": "^3.3.3"
   }
 }

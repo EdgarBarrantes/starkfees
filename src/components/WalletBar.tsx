@@ -3,7 +3,6 @@ import {
   useAccount,
   useConnectors,
   useStarkName,
-  useStarknet,
 } from "@starknet-react/core";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMediaQuery } from "react-responsive";
@@ -12,7 +11,7 @@ import Link from "next/link";
 
 function WalletConnected() {
   const { address } = useAccount();
-  const { disconnect } = useConnectors();
+  const { disconnect, available } = useConnectors();
   const [starknetID, setStarknetID] = useState("");
 
   const {
@@ -24,6 +23,7 @@ function WalletConnected() {
     contract:
       "0x6ac597f8116f886fa1c97a23fa4e08299975ecaf6b598873ca6792b9bbfb678",
   });
+  
   useEffect(() => {
     if (id) {
       setStarknetID(id);
@@ -52,28 +52,12 @@ function WalletConnected() {
 
 function ConnectWallet() {
   const { connectors, connect, available } = useConnectors();
-  const { error } = useStarknet();
-  const [shouldOpenMobileModal, setShouldOpenMobileModal] = useState(false);
-  const [shouldOpenModal, setShouldOpenModal] = useState(false);
-  const isMobile = useMediaQuery({ query: "(max-width: 1024px)" });
 
-  useEffect(() => {
-    if (error) {
-      openModal();
-    }
-  }, [error]);
+  const [shouldOpenModal, setShouldOpenModal] = useState(false);
 
   const openModal = () => {
-    if (isMobile) {
-      setShouldOpenMobileModal(true);
-    } else if (error) {
-      setShouldOpenModal(true);
-    }
+    setShouldOpenModal(true);
   };
-
-  function closeMobileModal() {
-    setShouldOpenMobileModal(false);
-  }
 
   function closeModal() {
     setShouldOpenModal(false);
@@ -81,7 +65,7 @@ function ConnectWallet() {
 
   const customStyles = {
     content: {
-      backgroundColor: "rgba(255, 255, 255, 0.7)",
+      backgroundColor: "rgba(255, 255, 255, 0.8)",
       borderRadius: "10px",
       padding: "3rem",
       color: "black",
@@ -92,74 +76,40 @@ function ConnectWallet() {
       marginRight: "-50%",
       transform: "translate(-50%, -50%)",
     },
+    overlay: {
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+    },
   };
 
   const onConnectClick = (connector: Connector<any>) => () => {
     try {
       connect(connector);
-      openModal();
+      const isAvailable = available.some(
+        (availableConnector) => availableConnector.id === connector.id
+      );
+      if (!isAvailable) {
+        openModal();
+      }
     } catch (e) {
       console.log(e);
     }
   };
 
-  const videoId = "xm3YgoEiEDc";
-  const ytAppUrl = `vnd.youtube:${videoId}`;
-  const ytWebUrl = `https://www.youtube.com/watch?v=${videoId}`;
-
-  const handleVideoClick = useCallback(
-    (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-      event.preventDefault();
-      window.location.href = ytAppUrl;
-
-      setTimeout(() => {
-        window.location.href = ytWebUrl;
-      }, 2000);
-    },
-    [ytAppUrl, ytWebUrl]
-  );
-
   return (
-    <div className="md:ml-4 z-50">
-      <span className="text-xl px-3 pr-1 py-1 text-xl font-bold">
-        Choose a wallet:
-      </span>
+    <div className="md:ml-4 z-50 flex flex-col content-center md:flex-row">
       {connectors.map((connector) => {
         return (
           <button
-            key={connector.id()}
-            className="rounded-full bg-blue-600 bg-opacity-100 text-white font-bold px-3 py-1 text-xl mr-1"
+            key={connector.id}
+            className="rounded-full bg-blue-600 bg-opacity-100 text-white font-bold px-4 py-2 md:px-3 md:py-1 text-xl my-1 md:my-0 md:mr-1"
             style={{ cursor: "pointer", pointerEvents: "auto" }}
             onClick={onConnectClick(connector)}
             onTouchEnd={onConnectClick(connector)}
           >
-            {connector.id()}
+            {connector.id}
           </button>
         );
       })}
-      <Modal
-        isOpen={shouldOpenMobileModal}
-        onRequestClose={closeMobileModal}
-        contentLabel="Mobile?"
-        style={customStyles}
-      >
-        <p className="text-lg">
-          Support for mobile (Braavos)? Coming soon in your nearest laptop!
-        </p>
-        <br />
-        <p className="text-center">
-          In the meantime: <br />
-          <Link
-            href={ytWebUrl}
-            onClick={handleVideoClick}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-white font-semibold mt-2 block p-3 bg-orange-700 rounded-md text-center animate-pulse"
-          >
-            Check this out!
-          </Link>
-        </p>
-      </Modal>
       <Modal
         isOpen={shouldOpenModal}
         onRequestClose={closeModal}

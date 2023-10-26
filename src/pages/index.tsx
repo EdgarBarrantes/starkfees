@@ -73,9 +73,9 @@ export default function Home() {
 
         <div className="flex flex-col">
           <Image
-            src="/mcduck.png"
-            alt="An AI generated image of Scrooge McDuck"
-            width={182}
+            src="/duck.png"
+            alt="An AI generated image of a wealthy duck"
+            width={224}
             height={224}
             className={`basis-full self-center ${
               isLoadingFees ? "animate-spin" : ""
@@ -86,7 +86,7 @@ export default function Home() {
               <>
                 <div className="bg-blend-normal shadow-lg p-6 m-2 bg-slate-400 bg-opacity-40 rounded-lg md:basis-1/3">
                   <p>
-                    Let ol&#39; Scrooge McDuck tell ye. Ye have spent{" "}
+                    Let this ol&#39; duck tell ye. Ye have spent{" "}
                     <span className="py-1 px-3 rounded-lg bg-slate-400 bg-opacity-40 shadow-sm">
                       {(Number(feesData.fees) / 10 ** 18).toFixed(6)}Ξ
                     </span>
