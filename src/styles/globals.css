@@ -110,16 +110,27 @@ a {
   }
 }
 
-.gradient {
-  background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00);
-  animation: moveBackground 20s ease infinite;
+body {
+  background: #282828;
+  background: linear-gradient(45deg, #000000, #00ffff, #ff00ff, #00ffff, #000000);
+  background: #e67e42;
+  background: linear-gradient(45deg, #000000, #00ffff, #ff00ff, #00ffff, #000000);
+  background: radial-gradient(#7c523c, #e67e42, #be2c49);
+	height: 100vh;
+  background: linear-gradient(-45deg, #00ffff, #ff00ff, #ffff00);
+  /* background: radial-gradient(circle at 100%, #333, #333 50%, #eee 75%, #333 75%); */
+	background-size: 400% 400%;
+  animation: move 20s ease infinite;
 }
 
-@keyframes moveBackground {
+@keyframes move {
   0% {
-    background-position: 0 0;
+    background-position: 0% 0%;
   }
-  100% {
-    background-position: 200% 200%;
-  }
+	50% {
+		background-position: 100% 100%;
+	}
+	100% {
+		background-position: 0% 0%;
+	}
 }
