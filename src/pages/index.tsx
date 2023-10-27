@@ -61,7 +61,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={`${styles.main} gradient mb-8 md:mb-0`}>
+      <main className={`${styles.main} gradient mb-48 md:mb-0`}>
         <div className={`${styles.description}`}>
           <p className="text-lg ">
             How much in fees have ye spent in Starknet, eh?
