@@ -73,7 +73,7 @@ export default function Home() {
 
         <div className="flex flex-col">
           <Image
-            src="/duck.png"
+            src="/duck.webp"
             alt="An AI generated image of a wealthy duck"
             width={224}
             height={224}
