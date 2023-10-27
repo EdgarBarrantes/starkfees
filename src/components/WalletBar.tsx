@@ -19,11 +19,9 @@ function WalletConnected() {
     isLoading,
     isError,
   } = useStarkName({
-    address: address || "",
-    contract:
-      "0x6ac597f8116f886fa1c97a23fa4e08299975ecaf6b598873ca6792b9bbfb678",
+    address: address || ""
   });
-  
+
   useEffect(() => {
     if (id) {
       setStarknetID(id);

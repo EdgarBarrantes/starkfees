@@ -53,13 +53,52 @@ export default function Home() {
     setIsLoadingFees(false);
   };
 
+  const title = "Starkfees";
+  const description = "Fees you've shed, showcased";
+  const url = "https://starkfees.xyz";
+
   return (
     <>
       <Head>
-        <title>Starkfees</title>
-        <meta name="description" content="Simple fees for a stark(net)work" />
+        <title key="title">{title}</title>
+        <meta key="description" name="description" content={description} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
+        <meta
+          key="keywords"
+          name="keywords"
+          content={`Starknet, Starkfees, Fees, Ethereum, Starknet fees, Starknet fees calculator, Starknet fees tracker`}
+        />
+        <meta key="og-title" property="og:title" content={title} />
+        <meta
+          key="og-description"
+          property="og:description"
+          content={description}
+        />
+        <meta
+          key="og-url"
+          property="og:url"
+          content={`${url}/dapp-preview-starkfees.png`}
+        />
+        <meta
+          key="og-image"
+          property="og:image"
+          content={`${url}/dapp-preview-starkfees.png`}
+        />
+        <meta key="twitter-title" name="twitter:title" content={title} />
+        <meta
+          key="twitter-description"
+          name="twitter:description"
+          content={description}
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@starkfees" />
+        <meta
+          name="twitter:image"
+          content={`${url}/dapp-preview-starkfees.png`}
+        />
+
+        <link rel="canonical" href={url} />
       </Head>
       <main className={`${styles.main} gradient mb-48 md:mb-0`}>
         <div className={`${styles.description}`}>
